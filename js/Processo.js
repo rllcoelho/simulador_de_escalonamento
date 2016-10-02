@@ -1,12 +1,10 @@
 class Processo {
 
-	constructor(chegada, duracao /*, inicio, termino, turnaround, esperandoSemExecutar*/){
+	constructor(chegada, duracao){
 		this._chegada = chegada
 		this._duracao = duracao
-		//this._inicio = inicio
-		//this._termino = termino
-		//this._turnaround = turnaround
-		//this._esperandoSemExecutar = esperandoSemExecutar	
+		this._tempoRestante = duracao
+		this._segmentos = new Array()
 	}
 
 
@@ -48,6 +46,22 @@ class Processo {
 
 	get esperandoSemExecutar(){
 		return this._esperandoSemExecutar;
+	}
+
+	set segmentos(value){
+		this._segmentos = value;
+	}
+
+	get segmentos(){
+		return this._segmentos;
+	}
+
+	set tempoRestante(value){
+		this._tempoRestante = value;
+	}
+
+	get tempoRestante(){
+		return this._tempoRestante;
 	}
 
 }

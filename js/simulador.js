@@ -7,9 +7,13 @@
 		new Processo(3, 20)
 	];
 
-	console.log(processos);
+	//console.log(processos);
 
 	let esc = new Escalonador(processos);
 
 	console.log(esc.fifo());
+
+	console.log(esc.sjf());
+
+	console.log(esc.roundrobin());
 })();
