@@ -69,8 +69,6 @@ class Escalonador {
 			}
 		});
 
-		console.log(this.processos);
-
 		this.processos.forEach(function(p, k, ps){
 			if (k > 0) {
 				if (p.chegada === ps[k-1].termino) {
@@ -93,60 +91,52 @@ class Escalonador {
 	}
 
 	roundrobin () {
-		let qtdProcessos = this.processos.length;
-		let processosRestantes = qtdProcessos;
+		let qtdP = this.processos.length;
+		let processosRestantes = qtdP;
 		let taTotal = 0;
-		let i = 0;
 
-		let quantum = 3;
+		let quantum = 2;
 		let sobrecarga = 1;
 
 		this.processos.sort(function(a, b){
 			return a.chegada - b.chegada;
 		});
 
+		let i = 0;
 		while(processosRestantes > 0){
-			this.processos.forEach(function(p, k, ps){
-				if (p.tempoRestante > quantum) {
-					if(k === 0){
-						if(i !== 0){
-							p.turnaround = ps[qtdProcessos-1].turnaround - p.chegada + quantum + sobrecarga;
-						}
-						else{
-							p.turnaround = quantum + sobrecarga;
-						}
-					}
-					else{
-						p.turnaround = ps[k-1].turnaround - p.chegada + quantum + sobrecarga;
-						//p.segmentos.push({ini: ps[k-1].termino, fim: ps[k-1].termino + quantum});
+			if (this.processos[i % qtdP].tempoRestante > quantum) {
+				if (i === 0) {
+					this.processos[i % qtdP].turnaround = quantum + sobrecarga;
+				}
+				else {
+					this.processos[i % qtdP].turnaround = this.processos[i % qtdP - 1].termino + quantum + sobrecarga;
+					if (i < qtdP) {
+						this.processos[i % qtdP].turnaround -= this.processos[i % qtdP].chegada;
 					}
 				}
-				else if(p.tempoRestante > 0){
-					if(k === 0){
-						if(i !== 0){
-							p.turnaround = ps[qtdProcessos-1].termino - p.chegada + p.tempoRestante;
-						}
-						else{
-							p.turnaround = p.tempoRestante;
-						}
-					}
-					else{
-						p.turnaround = ps[k-1].termino - p.chegada + p.tempoRestante;
-						//p.segmentos.push({ini: ps[k-1].termino, fim: ps[k-1].termino + p.tempoRestante});
+			}
+			else if (this.processos[i % qtdP].tempoRestante > 0) {
+				if (i === 0) {
+					this.processos[i % qtdP].turnaround = this.processos[i % qtdP].tempoRestante + sobrecarga;
+				}
+				else {
+					this.processos[i % qtdP].turnaround = this.processos[i % qtdP - 1].termino + this.processos[i % qtdP].tempoRestante + sobrecarga;
+					if (i < qtdP) {
+						this.processos[i % qtdP].turnaround -= this.processos[i % qtdP].chegada;
 					}
 				}
-				p.termino = p.chegada + p.turnaround;
-				p.tempoRestante -= quantum;
-				if(p.tempoRestante <= 0){
-					taTotal += p.turnaround;
-					processosRestantes--;
-				}
-			});
+			}
+			this.processos[i % qtdP].termino = this.processos[i % qtdP].chegada + this.processos[i % qtdP].turnaround;
+			this.processos[i % qtdP].tempoRestante -= quantum;
+			if(this.processos[i % qtdP].tempoRestante <= 0){
+				taTotal += this.processos[i % qtdP].turnaround;
+				processosRestantes--;
+			}
 			i++;
 		}
 		return taTotal/qtdProcessos;
 	}
-
+/////////////////////////////////////////////////
 	edf () {
 
 	}

@@ -1,11 +1,12 @@
 (function(){
 
 	let processos = [
-		new Processo(0, 5),
-		new Processo(5, 10),
-		new Processo(2, 15),
-		new Processo(3, 20)
+		new Processo(0, 4),
+		new Processo(2, 2),
+		new Processo(4, 1),
+		new Processo(6, 3)
 	];
+
 
 	//console.log(processos);
 
