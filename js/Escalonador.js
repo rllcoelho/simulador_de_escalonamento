@@ -104,38 +104,63 @@ class Escalonador {
 
 		let i = 0;
 		while(processosRestantes > 0){
+			//Se o tempo que resta de duração do processo for maior que o quantum, 
+			// entra aqui e soma o quantum e a sobrecarga ao turnaround do processo.
 			if (this.processos[i % qtdP].tempoRestante > quantum) {
 				if (i === 0) {
-					this.processos[i % qtdP].turnaround = quantum + sobrecarga;
+					this.processos[i % qtdP].termino = quantum + sobrecarga;
 				}
+				//Se não for o primeiro processo, pega o valor 
 				else {
-					this.processos[i % qtdP].turnaround = this.processos[i % qtdP - 1].termino + quantum + sobrecarga;
-					if (i < qtdP) {
-						this.processos[i % qtdP].turnaround -= this.processos[i % qtdP].chegada;
-					}
+					let ant = i !== 4 ? i% qtdP -1 : 0;
+					this.processos[i % qtdP].termino = this.processos[ant].termino + quantum + sobrecarga;
 				}
 			}
+			//Se o tempo que resta de duração do processo for menor ou igual ao quantum e maior que zero, 
+			// entra aqui e soma somente o tempo restante ao turnaround do processo.
 			else if (this.processos[i % qtdP].tempoRestante > 0) {
 				if (i === 0) {
-					this.processos[i % qtdP].turnaround = this.processos[i % qtdP].tempoRestante + sobrecarga;
+					this.processos[i % qtdP].termino = this.processos[i % qtdP].tempoRestante;
 				}
 				else {
-					this.processos[i % qtdP].turnaround = this.processos[i % qtdP - 1].termino + this.processos[i % qtdP].tempoRestante + sobrecarga;
-					if (i < qtdP) {
-						this.processos[i % qtdP].turnaround -= this.processos[i % qtdP].chegada;
-					}
+					let ant = i !== 4 ? i% qtdP -1 : 0;
+					this.processos[i % qtdP].termino = this.processos[ant].termino + this.processos[i % qtdP].tempoRestante;
 				}
 			}
-			this.processos[i % qtdP].termino = this.processos[i % qtdP].chegada + this.processos[i % qtdP].turnaround;
+			//this.processos[i % qtdP].termino = this.processos[i % qtdP].chegada + this.processos[i % qtdP].turnaround;
 			this.processos[i % qtdP].tempoRestante -= quantum;
 			if(this.processos[i % qtdP].tempoRestante <= 0){
 				taTotal += this.processos[i % qtdP].turnaround;
 				processosRestantes--;
 			}
 			i++;
+
 		}
-		return taTotal/qtdProcessos;
+		this.processos.forEach(function (p){
+			p.turnaround = p.termino - p.chegada;
+		});
+		return taTotal/qtdP;
 	}
+
+	roundrobin2 (){
+		let qtdP = this.processos.length;
+		let processosRestantes = qtdP;
+		let taTotal = 0;
+
+		let quantum = 2;
+		let sobrecarga = 1;
+
+		let ps = [];
+
+		this.processos.sort(function(a, b){
+			return a.chegada - b.chegada;
+		});
+
+		while (processosRestantes > 0){
+			
+		}
+	}
+
 /////////////////////////////////////////////////
 	edf () {
 
