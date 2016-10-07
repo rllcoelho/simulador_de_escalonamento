@@ -104,37 +104,30 @@ class Escalonador {
 
 		let i = 0;
 		while(processosRestantes > 0){
-			if (this.processos[i % qtdP].tempoRestante > quantum) {
-				if (i === 0) {
-					this.processos[i % qtdP].turnaround = quantum + sobrecarga;
-				}
-				else {
-					this.processos[i % qtdP].turnaround = this.processos[i % qtdP - 1].termino + quantum + sobrecarga;
-					if (i < qtdP) {
-						this.processos[i % qtdP].turnaround -= this.processos[i % qtdP].chegada;
-					}
-				}
+			let atual = i % qtdP;
+			let ant = atual === 0 ? 4 : atual -1;
+
+			if (i === 0) {
+				this.processos[atual].termino = Math.min(quantum, this.processos[atual].tempoRestante);
+				this.processos[atual].tempoRestante -= quantum;
+				this.processos[atual].termino += this.processos[atual].tempoRestante >= quantum ? sobrecarga : 0;
 			}
-			else if (this.processos[i % qtdP].tempoRestante > 0) {
-				if (i === 0) {
-					this.processos[i % qtdP].turnaround = this.processos[i % qtdP].tempoRestante + sobrecarga;
-				}
-				else {
-					this.processos[i % qtdP].turnaround = this.processos[i % qtdP - 1].termino + this.processos[i % qtdP].tempoRestante + sobrecarga;
-					if (i < qtdP) {
-						this.processos[i % qtdP].turnaround -= this.processos[i % qtdP].chegada;
-					}
-				}
+			else if(this.processos[atual].chegada <= this.processos[ant].termino && this.processos[atual].tempoRestante > 0){
+				this.processos[atual].termino = this.processos[ant].termino + Math.min(quantum, this.processos[atual].tempoRestante);
+				this.processos[atual].tempoRestante -= quantum;
+				this.processos[atual].termino += this.processos[atual].tempoRestante >= quantum ? sobrecarga : 0;
 			}
-			this.processos[i % qtdP].termino = this.processos[i % qtdP].chegada + this.processos[i % qtdP].turnaround;
-			this.processos[i % qtdP].tempoRestante -= quantum;
-			if(this.processos[i % qtdP].tempoRestante <= 0){
-				taTotal += this.processos[i % qtdP].turnaround;
+
+			if(this.processos[atual].tempoRestante <= 0){
 				processosRestantes--;
 			}
 			i++;
 		}
-		return taTotal/qtdProcessos;
+		this.processos.forEach(function(p){
+			p.turnaround = p.termino - p.chegada;
+			taTotal += p.turnaround;
+		});
+		return taTotal/qtdP;
 	}
 /////////////////////////////////////////////////
 	edf () {
