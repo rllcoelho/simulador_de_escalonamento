@@ -103,22 +103,33 @@ class Escalonador {
 		});
 
 		let i = 0;
+		let pL = [];
 		while(processosRestantes > 0){
-			let atual = i % qtdP;
-			let ant = atual === 0 ? 4 : atual -1;
+			let tamLista = pL.length();
+			let atual = i % tamLista;
+			let ant = atual === 0 ? tamLista : atual -1;
 
 			if (i === 0) {
-				this.processos[atual].termino = Math.min(quantum, this.processos[atual].tempoRestante);
-				this.processos[atual].tempoRestante -= quantum;
-				this.processos[atual].termino += this.processos[atual].tempoRestante >= quantum ? sobrecarga : 0;
+				pL.push(atual);
+				this.processos[pL[atual]].chegou = true;
+				this.processos[pL[atual]].termino = Math.min(quantum, this.processos[atual].tempoRestante);
+				this.processos[pL[atual]].tempoRestante -= quantum;
+				this.processos[pL[atual]].termino += this.processos[pL[atual]].tempoRestante >= quantum ? sobrecarga : 0;
 			}
-			else if(this.processos[atual].chegada <= this.processos[ant].termino && this.processos[atual].tempoRestante > 0){
-				this.processos[atual].termino = this.processos[ant].termino + Math.min(quantum, this.processos[atual].tempoRestante);
-				this.processos[atual].tempoRestante -= quantum;
-				this.processos[atual].termino += this.processos[atual].tempoRestante >= quantum ? sobrecarga : 0;
+			else if (this.processos[pL[atual]].chegou === false &&
+				this.processos[pL[atual]].chegada <= this.processos[pL[ant]].termino &&
+				this.processos[pL[atual]].tempoRestante > 0) {
+					pL.push(atual);//eraaaaado
+					this.processos[pL[atual]].chegou = true;
 			}
 
-			if(this.processos[atual].tempoRestante <= 0){
+			if(this.processos[pL[atual]].chegou === true && this.processos[atual].tempoRestante > 0){
+				this.processos[pL[atual]].termino = this.processos[pL[ant]].termino + Math.min(quantum, this.processos[pL[atual]].tempoRestante);
+				this.processos[pL[atual]].tempoRestante -= quantum;
+				this.processos[pL[atual]].termino += this.processos[pL[atual]].tempoRestante >= quantum ? sobrecarga : 0;
+			}
+
+			if(this.processos[pL[atual]].tempoRestante <= 0){
 				processosRestantes--;
 			}
 			i++;
