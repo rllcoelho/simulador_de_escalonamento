@@ -28,8 +28,10 @@ class Escalonador {
 	fifo () {
 		let qtdProcessos = this.processos.length;
 		let taTotal = 0;
+		this.processos.setdeadline(0);
 
 		this.processos.sort(function(a, b){
+			this.processos.setdeadline(0);
 			return a.chegada - b.chegada;
 		});
 
@@ -60,6 +62,7 @@ class Escalonador {
 
 		this.processos.sort(function(a, b){
 			if(a.chegada < b.chegada){
+				this.processos.setdeadline(0);
 				return a.chegada - b.chegada;
 			}
 			else{
@@ -95,10 +98,12 @@ class Escalonador {
 		let processosRestantes = qtdP;
 		let taTotal = 0;
 
+
 		let quantum = 2;
 		let sobrecarga = 1;
 
 		this.processos.sort(function(a, b){
+			this.processos.setdeadline(0);
 			return a.chegada - b.chegada;
 		});
 
@@ -139,6 +144,40 @@ class Escalonador {
 			taTotal += p.turnaround;
 		});
 		return taTotal/qtdP;
+	}
+	
+	deadline () {
+		let qtdP = this.processos.length;
+		let processosRestantes = qtdP;
+		let taTotal = 0;
+
+
+		let quantum = 2;
+		let sobrecarga = 1;
+
+		this.processos.sort(function(a, b){
+			return a.deadline - b.deadline;
+		});
+
+		this.processos.forEach(function(p, k, ps){
+			if (k > 0) {
+				if (p.chegada === ps[k-1].termino) {
+					p.inicio = p.chegada;
+				}
+				else {
+					p.inicio = ps[k-1].termino;
+				}
+			}
+			else{
+				p.inicio = p.chegada;
+			}
+
+			p.termino = p.inicio + p.duracao;
+			p.turnaround = p.termino - p.chegada;
+			p.esperandoSemExecutar = p.inicio - p.chegada;
+			taTotal += p.turnaround;
+		});
+		return taTotal/qtdProcessos;
 	}
 /////////////////////////////////////////////////
 	edf () {

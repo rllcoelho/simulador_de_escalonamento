@@ -6,6 +6,7 @@ class Processo {
 		this._tempoRestante = duracao
 		this._segmentos = new Array()
 		this.chegou = false;
+		this._deadline = deadline;
 	}
 
 
@@ -71,5 +72,13 @@ class Processo {
 
 	get chegou(){
 		return this.chegou;
+	}
+	
+	set deadline(value){
+		this._deadline = value;
+	}
+
+	get deadline(){
+		return this._deadline;
 	}
 }

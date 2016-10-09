@@ -17,4 +17,6 @@
 	console.log(esc.sjf());
 
 	console.log(esc.roundrobin());
+
+	console.log(esc.deadline());
 })();
