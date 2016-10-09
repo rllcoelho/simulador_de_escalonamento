@@ -124,7 +124,9 @@ class Escalonador {
 		});
 
 		let i = 0;
+		let pL = [];
 		while(processosRestantes > 0){
+<<<<<<< HEAD
 			let atual = i % qtdP;
 			//let ant = atual === 0 ? qtdP : atual - 1;
 
@@ -167,7 +169,7 @@ class Escalonador {
 				this.processos[atual].termino += this.processos[atual].tempoRestante >= quantum ? sobrecarga : 0;
 			}
 
-			if(this.processos[atual].tempoRestante <= 0){
+			if(this.processos[pL[atual]].tempoRestante <= 0){
 				processosRestantes--;
 			}
 			i++;

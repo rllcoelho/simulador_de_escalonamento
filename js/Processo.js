@@ -64,7 +64,7 @@ class Processo {
 	get tempoRestante(){
 		return this._tempoRestante;
 	}
-
+	
 	set existe(value){
 		this._existe = value;
 	}
