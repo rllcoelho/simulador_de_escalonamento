@@ -90,6 +90,26 @@ class Escalonador {
 		return taTotal/qtdProcessos;
 	}
 
+	atual () {
+		return i % qtdP;
+	}
+
+	anterior (atual){
+		return atual === 0 ? this.processos.length - 1 : atual - 1;
+	}
+
+	anteriorExistente (atual){
+		let ant = this.anterior(atual);
+		let aux = atual;
+		while (true) {
+			if(this.processos[ant].existe){
+				return ant;
+			}
+			aux = aux === 0 ? this.processos.length - 1 : aux- 1 ;
+			ant = this.anterior(aux);
+		}
+	}
+
 	roundrobin () {
 		let qtdP = this.processos.length;
 		let processosRestantes = qtdP;
@@ -97,6 +117,7 @@ class Escalonador {
 
 		let quantum = 2;
 		let sobrecarga = 1;
+		let tempo = 0;
 
 		this.processos.sort(function(a, b){
 			return a.chegada - b.chegada;
@@ -105,15 +126,43 @@ class Escalonador {
 		let i = 0;
 		while(processosRestantes > 0){
 			let atual = i % qtdP;
-			let ant = atual === 0 ? 4 : atual -1;
+			//let ant = atual === 0 ? qtdP : atual - 1;
+
+			/*let antExistente = this.processos.indexOf(
+				this.processos.find(function (p, k){
+					if ((k < atual || k === atual + qtdP) && p.existe){
+						return p;
+					}
+
+					let aux = atual;
+					if(ps[this.anterior].existe){
+						return ps[ant];
+					}
+					else{
+						ant = this.anterior(aux--);
+					}
+
+				});
+			);*/
 
 			if (i === 0) {
 				this.processos[atual].termino = Math.min(quantum, this.processos[atual].tempoRestante);
 				this.processos[atual].tempoRestante -= quantum;
 				this.processos[atual].termino += this.processos[atual].tempoRestante >= quantum ? sobrecarga : 0;
+				this.processos[atual].existe = true;
 			}
-			else if(this.processos[atual].chegada <= this.processos[ant].termino && this.processos[atual].tempoRestante > 0){
-				this.processos[atual].termino = this.processos[ant].termino + Math.min(quantum, this.processos[atual].tempoRestante);
+
+
+			if (this.processos[atual].existe === false &&
+				this.processos[atual].chegada <= this.processos[this.anteriorExistente(atual)].termino &&
+				this.processos[atual].tempoRestante > 0) {
+					this.processos[atual].existe = true;
+			}
+			if (this.processos[atual].tempoRestante <= 0) {
+				this.processos[atual].existe = false;
+			}
+			else if(i!==0 && this.processos[atual].existe){
+				this.processos[atual].termino = this.processos[this.anteriorExistente(atual)].termino + Math.min(quantum, this.processos[atual].tempoRestante);
 				this.processos[atual].tempoRestante -= quantum;
 				this.processos[atual].termino += this.processos[atual].tempoRestante >= quantum ? sobrecarga : 0;
 			}
@@ -122,6 +171,8 @@ class Escalonador {
 				processosRestantes--;
 			}
 			i++;
+			//TODO	: CONSIDERAR TEMPO TOTAL DE EXECUÇÃO PARA PODER EXECUTAR
+			//PROCESSOS QUE POSSAM CHEGAR DEPOIS DE TODOS OS OUTROS PROCESSOS TEREM ACABADO
 		}
 		this.processos.forEach(function(p){
 			p.turnaround = p.termino - p.chegada;
@@ -129,6 +180,7 @@ class Escalonador {
 		});
 		return taTotal/qtdP;
 	}
+
 /////////////////////////////////////////////////
 	edf () {
 

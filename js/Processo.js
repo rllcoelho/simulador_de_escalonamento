@@ -5,7 +5,7 @@ class Processo {
 		this._duracao = duracao
 		this._tempoRestante = duracao
 		this._segmentos = new Array()
-		this._inexist = true;
+		this._existe = false;
 	}
 
 
@@ -65,11 +65,11 @@ class Processo {
 		return this._tempoRestante;
 	}
 
-	set inexist(value){
-		this._inexist = value;
+	set existe(value){
+		this._existe = value;
 	}
 
-	get inexist(){
-		return this._inexist;
+	get existe(){
+		return this._existe;
 	}
 }
