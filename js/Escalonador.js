@@ -157,27 +157,9 @@ class Escalonador {
 
 		this.processos.sort(function(a, b){
 			return a.deadline - b.deadline;
-		});
-
-		this.processos.forEach(function(p, k, ps){
-			if (k > 0) {
-				if (p.chegada === ps[k-1].termino) {
-					p.inicio = p.chegada;
-				}
-				else {
-					p.inicio = ps[k-1].termino;
-				}
-			}
-			else{
-				p.inicio = p.chegada;
-			}
-
-			p.termino = p.inicio + p.duracao;
-			p.turnaround = p.termino - p.chegada;
-			p.esperandoSemExecutar = p.inicio - p.chegada;
-			taTotal += p.turnaround;
-		});
-		return taTotal/qtdProcessos;
+		});		
+		
+		// Colocar o escalonamento do RR, exceto pela ordenação. Esta é feita por deadline.
 	}
 /////////////////////////////////////////////////
 	edf () {
