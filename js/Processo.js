@@ -4,8 +4,8 @@ class Processo {
 		this._chegada = chegada
 		this._duracao = duracao
 		this._tempoRestante = duracao
-		this._segmentos = new Array()
 		this._existe = false;
+		this._termino = 0;
 	}
 
 
@@ -64,12 +64,20 @@ class Processo {
 	get tempoRestante(){
 		return this._tempoRestante;
 	}
-	
+
 	set existe(value){
 		this._existe = value;
 	}
 
 	get existe(){
 		return this._existe;
+	}
+
+	set deadline(value){
+		this._deadline = value;
+	}
+
+	get deadline(){
+		return this._deadline;
 	}
 }

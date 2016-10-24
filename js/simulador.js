@@ -1,46 +1,37 @@
-(function(){
 
-	let btn_TAMedio = getElementById('processes');
+var pega_processos = function () {
 
-	btn_TAMedio.onclick = escalona_processos();
+	let p1chegada = parseInt($('#processo1-chegada').val());
+	let p2chegada = parseInt($('#processo2-chegada').val());
+	let p3chegada = parseInt($('#processo3-chegada').val());
+	let p4chegada = parseInt($('#processo4-chegada').val());
+	let p5chegada = parseInt($('#processo5-chegada').val());
 
-	/*let processos = [
-		new Processo(0, 4),
-		new Processo(2, 2),
-		new Processo(4, 1),
-		new Processo(6, 3)
-	];
+	let p1duracao = parseInt($('#processo1-duracao').val());
+	let p2duracao = parseInt($('#processo2-duracao').val());
+	let p3duracao = parseInt($('#processo3-duracao').val());
+	let p4duracao = parseInt($('#processo4-duracao').val());
+	let p5duracao = parseInt($('#processo5-duracao').val());
 
-
-	//console.log(processos);
-
-	let esc = new Escalonador(processos);
-
-	console.log(esc.fifo());
-
-	console.log(esc.sjf());
-
-	console.log(esc.roundrobin());
-	*/
-})();
-
-function pega_processos() {
-	let processos = [
-		new Processo($('#processo1-chegada').value, $('#processo1-duracao').value),
-		new Processo($('#processo2-chegada').value, $('#processo2-duracao').value),
-		new Processo($('#processo3-chegada').value, $('#processo3-duracao').value),
-		new Processo($('#processo4-chegada').value, $('#processo4-duracao').value),
-		new Processo($('#processo5-chegada').value, $('#processo5-duracao').value)
+	var processos = [
+		new Processo(p1chegada, p1duracao),
+		new Processo(p2chegada, p2duracao),
+		new Processo(p3chegada, p3duracao),
+		new Processo(p4chegada, p4duracao),
+//		new Processo(p5chegada, p5duracao)
 	];
 
 	return processos;
 }
 
-function escalona_processos(){
-	processos = pega_procesos();
+var escalona_processos =  function (){
+	processos = pega_processos();
 
 	let esc = new Escalonador(processos);
-	console.log(esc.fifo());
+	//console.log(esc.fifo());
+	$('#resultadoFIFO').html(esc.fifo());
+	$('#resultadoSJF').html(esc.sjf());
+//	$('#resultadoRR').html(esc.roundrobin());
 	console.log(esc.sjf());
 	console.log(esc.roundrobin());
 }

@@ -9,26 +9,10 @@
 </head>
 <body>
     <main class="container">
-        <div class="jumbotron">
-            <h1>Escalonador</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, magnam accusamus vitae a officiis ratione, doloremque repellat eaque cupiditate odio ut eius eum sunt quas qui perspiciatis rem sed quaerat!</p>
-            <ul class="nav nav-pills">
-                <li role="presentation" class="active"><a href="#">FIFO</a></li>
-                <li role="presentation"><a href="#">SJF</a></li>
-                <li role="presentation"><a href="#">Round Robin</a></li>
-                <li role="presentation"><a href="#">Prioridade</a></li>
-                <li role="presentation"><a href="#">EJF</a></li>
-            </ul>
+        <div class="page-header">
+            <h1>Escalonador de processos <small>(Calcula o turnaround médio)</small></h1>
         </div>
         <div class="row">
-            <div class="col-md-4 col-xs-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h2>FIFO</h2>
-                        <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis veritatis facilis aspernatur, in, magni eveniet temporibus ab amet expedita voluptatibus, assumenda tenetur reprehenderit earum corrupti natus, ipsam obcaecati architecto. Nostrum!</span><span>Optio culpa at cumque quos, earum! Odio a, explicabo id, iste deleniti autem voluptatibus amet facere magni qui aliquid optio ratione quod deserunt hic laboriosam culpa doloribus reiciendis, temporibus eius.</span></p>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-8 col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -81,7 +65,7 @@
 	                            </div>
 	                            <div class="col-md-6">
 	                                <div class="input-group input-group-sm">
-	                                    <input type="text" class="form-control" id="processo4-chapada" placeholder="chegada" aria-describedby="sizing-addon3">
+	                                    <input type="text" class="form-control" id="processo4-chegada" placeholder="chegada" aria-describedby="sizing-addon3">
 	                                </div>
 	                            </div>
 	                        </row>
@@ -101,8 +85,11 @@
                             <br>
                             <row>
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-primary" id="btn-TAMedio">TA médio</button>
+                                    <button type="button" class="btn btn-primary" onclick="escalona_processos()" id="btn-TAMedio">Turnaround médio</button>
                                 </div>
+                            </row>
+                            <row>
+                                FIFO: <span id="resultadoFIFO"></span> SJF: <span id="resultadoSJF"></span> RR: <span id="resultadoRR"></span>
                             </row>
 						</form>
                     </div>
