@@ -45,13 +45,14 @@ class Escalonador {
 		let taTotal = 0;
 
 		this._processos.sort(function(a, b){
-			if(a.chegada < b.chegada){
+			if(a.chegada < b.chegada && a.duracao < b.duracao){
 				return a.chegada - b.chegada;
 			}
-			else{
-				if(a.duracao < b.duracao){
-					return a.duracao - b.duracao;
-				}
+			if (a.chegada < b.chegada && a.duracao > b.duracao){
+				return b.chegada - a.chegada;
+			}
+			else {
+				return b.chegada - a.chegada;
 			}
 		});
 
